@@ -1,6 +1,7 @@
 $(document).ready(function(){
   fetchIdeas();
   fetchIdeasButton();
+  deleteIdea();
 });
 
 function fetchIdeas(){
@@ -31,6 +32,8 @@ function createIdeaHtml( data ){
   +"<p>Quality: "
   +data.quality
   +"</p>"
+  +"<button id='delete-idea' name='button-fetch'"
+  +" class='btn btn-default btn-xs'>Delete</button>"
   +"</div></br>")
 }
 
@@ -42,4 +45,17 @@ function handleError(error){console.log(error)}
 
 function fetchIdeasButton(){
   $("button[name=button-fetch]").on("click", fetchIdeas);
+}
+
+function deleteIdea(){
+  $('#latest-ideas').on('click', '#delete-idea', function(){
+    var $idea = $(this).closest('.idea');
+    $.ajax({
+      url: 'api/v1/ideas/' + $idea.data('id'),
+      type: 'delete'
+    }).then(function(){
+      $idea.remove();
+    })
+    .fail(handleError);
+  });
 }
