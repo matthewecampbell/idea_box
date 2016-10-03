@@ -21,7 +21,7 @@ function collectIdeas( ideasData ){
 }
 
 function createIdea(){
-  $("#create-post").on("click", function(){
+  $("#create-idea").on("click", function(){
     var ideaParams = {
       idea: {
         title: $("#idea-title").val(),
@@ -31,6 +31,8 @@ function createIdea(){
     $.post("api/v1/ideas.json", ideaParams)
     .then(createIdeaHtml)
     .then(renderIdea)
+    .then($('#idea-title').val(''))
+    .then($('#idea-body').val(''))
     .fail(handleError)
   })
 }
