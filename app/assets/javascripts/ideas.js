@@ -1,7 +1,9 @@
 $(document).ready(function(){
   fetchIdeas();
   fetchIdeasButton();
+  createIdea();
   deleteIdea();
+  // changeQuality();
 });
 
 function fetchIdeas(){
@@ -14,8 +16,27 @@ function fetchIdeas(){
 }
 
 
-function  collectIdeas( ideasData ){
+function collectIdeas( ideasData ){
   return ideasData.map(createIdeaHtml);
+}
+
+function createIdea(){
+  $("#create-post").on("click", function(){
+    var ideaParams = {
+      idea: {
+        title: $("#idea-title").val(),
+        body: $("#idea-body").val()
+      }
+    }
+    $.post("api/v1/ideas.json", ideaParams)
+    .then(createIdeaHtml)
+    .then(renderIdea)
+    .fail(handleError)
+  })
+}
+
+function renderIdea(ideaData){
+  $("#latest-ideas").prepend(ideaData);
 }
 
 function createIdeaHtml( data ){
@@ -27,13 +48,15 @@ function createIdeaHtml( data ){
   +"<h6>Published on: "
   +data.created_at
   +"</h6><p>Description: "
-  +data.body
+  +data.body.substring(0,100)
   +"</p>"
   +"<p>Quality: "
   +data.quality
   +"</p>"
   +"<button id='delete-idea' name='button-fetch'"
   +" class='btn btn-default btn-xs'>Delete</button>"
+  +"<button id='change-quality' name='button-fetch'"
+  +" class='btn btn-default btn-xs'>Change Quality</button>"
   +"</div></br>")
 }
 
@@ -59,3 +82,7 @@ function deleteIdea(){
     .fail(handleError);
   });
 }
+//
+// function changeQuality(){
+//   $('#latest-ideas').on('click', '#change-quality', funciton(){})
+// }
