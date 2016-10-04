@@ -45,12 +45,12 @@ function renderIdea(ideaData){
 function createIdeaHtml( data ){
   return $("<div class='idea' data-id='"
   +data.id
-  +"'><h3>Title: "
+  +"'><h3 id='ideaTitleEdit' contenteditable='true'>Title: "
   +data.title
   +"</h3>"
   +"<h6>Published on: "
   +data.created_at
-  +"</h6><p>Description: "
+  +"</h6><p id='ideaBodyEdit' contenteditable='true'>Description: "
   +data.body.substring(0,100)
   +"</p>"
   +"<p>Quality: "
@@ -87,6 +87,10 @@ function decreaseQuality(){
     .then(fetchIdeas)
     .fail(handleError)
   })
+}
+
+function saveUpdate(){
+  $('#latest-ideas').on('click', '')
 }
 
 function renderIdeas( ideasData ){
