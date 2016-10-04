@@ -5,6 +5,7 @@ $(document).ready(function(){
   deleteIdea();
   increaseQuality();
   decreaseQuality();
+  searchTitles();
 });
 
 function fetchIdeas(){
@@ -45,12 +46,12 @@ function renderIdea(ideaData){
 function createIdeaHtml( data ){
   return $("<div class='idea' data-id='"
   +data.id
-  +"'><h3 id='ideaTitleEdit' contenteditable='true'>Title: "
+  +"'><h3 class='ideaTitleEdit' contenteditable='true'>Title: "
   +data.title
   +"</h3>"
   +"<h6>Published on: "
   +data.created_at
-  +"</h6><p id='ideaBodyEdit' contenteditable='true'>Description: "
+  +"</h6><p class='ideaBodyEdit' contenteditable='true'>Description: "
   +data.body.substring(0,100)
   +"</p>"
   +"<p>Quality: "
@@ -115,6 +116,36 @@ function deleteIdea(){
     .fail(handleError);
   });
 }
+
+function searchTitles(){
+  var $ideas = $('#latest-ideas');
+$('#idea-search').keyup(function() {
+
+    var val = '^(?=.*\\b' + $.trim($(this).val()).split(/\s+/).join('\\b)(?=.*\\b') + ').*$',
+        reg = RegExp(val, 'i'),
+        text;
+
+    $ideas.show().filter(function() {
+        text = $(this).text().replace(/\s+/g, ' ');
+        return !reg.test(text);
+    }).hide();
+});
+}
+// function searchTitles(){
+//   $("#idea-search").bind("keyup", function() {
+//     var text = $(this).val().toLowerCase();
+//     var titles = $(".ideaTitleEdit");
+//
+//     //first, hide all:
+//     titles.parent().hide();
+//
+//     //show only those matching user input:
+//     titles.filter(function () {
+//       return $(this).text().toLowerCase().indexOf(text) == 0;
+//     }).parent().show();
+//
+//   });
+// }
 //
 // function changeQuality(){
 //   $('#latest-ideas').on('click', '#change-quality', funciton(){})
