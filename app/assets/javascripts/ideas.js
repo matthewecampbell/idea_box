@@ -3,7 +3,8 @@ $(document).ready(function(){
   fetchIdeasButton();
   createIdea();
   deleteIdea();
-  // changeQuality();
+  increaseQuality();
+  decreaseQuality();
 });
 
 function fetchIdeas(){
@@ -57,9 +58,35 @@ function createIdeaHtml( data ){
   +"</p>"
   +"<button id='delete-idea' name='button-fetch'"
   +" class='btn btn-default btn-xs'>Delete</button>"
-  +"<button id='change-quality' name='button-fetch'"
-  +" class='btn btn-default btn-xs'>Change Quality</button>"
+  +"<button id='increase-quality' name='button-fetch'"
+  +" class='btn btn-default btn-xs'><span class='glyphicon glyphicon-thumbs-up'></span></button>"
+  +"<button id='decrease-quality' name='button-fetch'"
+  +" class='btn btn-default btn-xs'><span class='glyphicon glyphicon-thumbs-down'></span></button>"
   +"</div></br>")
+}
+
+function increaseQuality(){
+  $('#latest-ideas').on('click', '#increase-quality', function(){
+    var $idea = $(this).closest('.idea');
+    $.ajax({
+      url: 'api/v1/ideas/' + $idea.data('id') + "?change=increase",
+      type: 'put'
+    })
+    .then(fetchIdeas)
+    .fail(handleError)
+  })
+}
+
+function decreaseQuality(){
+  $('#latest-ideas').on('click', '#decrease-quality', function(){
+    var $idea = $(this).closest('.idea');
+    $.ajax({
+      url: 'api/v1/ideas/' + $idea.data('id') + "?change=decrease",
+      type: 'put'
+    })
+    .then(fetchIdeas)
+    .fail(handleError)
+  })
 }
 
 function renderIdeas( ideasData ){

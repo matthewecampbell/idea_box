@@ -27,7 +27,7 @@ gem 'jbuilder', '~> 2.5'
 gem 'figaro'
 gem 'faraday'
 gem 'pry'
-
+gem 'twitter-bootstrap-rails', :git => 'git://github.com/seyhunak/twitter-bootstrap-rails.git'
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
@@ -39,7 +39,6 @@ group :test do
   gem 'database_cleaner'
   gem 'factory_girl_rails'
   gem 'simplecov', require: false
-  gem 'faraday'
   gem 'webmock'
 end
 
