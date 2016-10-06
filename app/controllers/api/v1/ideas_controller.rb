@@ -24,7 +24,7 @@ class Api::V1::IdeasController < ApplicationController
   private
 
   def idea_params
-    params.permit(:title, :body, :quality)
+    params.permit(:title, :body, :quality, :tag_list)
   end
 
   def change_quality?

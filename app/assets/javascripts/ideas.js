@@ -53,13 +53,15 @@ function createIdea(){
   $("#create-idea").on("click", function(){
     var ideaParams = {
         title: $("#idea-title").val(),
-        body: $("#idea-body").val()
+        body: $("#idea-body").val(),
+        tags: $("#idea-tags").val()
       }
     $.post("api/v1/ideas.json", ideaParams)
     .then(createIdeaHtml)
     .then(renderIdea)
     .then($('#idea-title').val(''))
     .then($('#idea-body').val(''))
+    .then($('#idea-tags').val(''))
     .fail(handleError)
   })
 }
@@ -71,6 +73,9 @@ function renderIdea(ideaData){
 function createIdeaHtml( data ){
   var dataShortBody = data.body.substr(0, 100)
   var dataTruncatedBody = dataShortBody.substr(0, Math.min(dataShortBody.length, dataShortBody.lastIndexOf(" ")))
+  var tags = data.tags.forEach(function(tag){
+    return tag.name;
+  })
   return $("<div class='idea' data-id='"
   +data.id
   +"'><h3 class='ideaEdit title' contenteditable='true'>"
@@ -83,6 +88,9 @@ function createIdeaHtml( data ){
   +"</p>"
   +"<p>Quality: "
   +data.quality
+  +"</p>"
+  +"<p>Tags: "
+  +data.tags.for
   +"</p>"
   +"<button id='increase-quality' name='button-fetch'"
   +" class='btn btn-default btn-xs'><i class='fa fa-thumbs-up'></i></button>"
