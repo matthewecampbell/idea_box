@@ -8,6 +8,7 @@ $(document).ready(function(){
   decreaseQuality();
   searchTitles();
   saveUpdate();
+  sortOnQuality();
 });
 
 
@@ -162,9 +163,30 @@ function compare(a, b) {
   return 0;
 }
 
-function saveUpdate(){
+function uncompare(a, b) {
+  if (a.quality < b.quality)
+    return 1;
+  if (a.quality > b.quality)
+    return -1;
+  return 0;
+}
+
+function renderSortedIdeas( ideasData ){
+  $("#latest-ideas").html(ideasData);
+}
+
+function sortOnQuality(){
   $('#sort').on('click', function(){
-    var sorted = $ideas.sort(compare);
-    renderIdeas(collectIdeas(sorted));
+    if ($('#sort').data('clicked')){
+    $(this).data('clicked', false);
+  } else {
+    $(this).data('clicked', true);
+  }
+    if ($('#sort').data('clicked')){
+      var sorted = $ideas.sort(uncompare);
+    } else{
+      var sorted = $ideas.sort(compare);
+    }
+    return renderSortedIdeas(collectIdeas(sorted));
   })
 }
