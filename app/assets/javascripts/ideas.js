@@ -7,6 +7,7 @@ $(document).ready(function(){
   increaseQuality();
   decreaseQuality();
   searchTitles();
+  saveUpdate();
 });
 
 
@@ -50,11 +51,9 @@ function collectIdeas( ideasData ){
 function createIdea(){
   $("#create-idea").on("click", function(){
     var ideaParams = {
-      idea: {
         title: $("#idea-title").val(),
         body: $("#idea-body").val()
       }
-    }
     $.post("api/v1/ideas.json", ideaParams)
     .then(createIdeaHtml)
     .then(renderIdea)
@@ -71,23 +70,23 @@ function renderIdea(ideaData){
 function createIdeaHtml( data ){
   return $("<div class='idea' data-id='"
   +data.id
-  +"'><h3 class='ideaTitleEdit' contenteditable='true'>Title: "
+  +"'><h3 class='ideaEdit title' contenteditable='true'>"
   +data.title
   +"</h3>"
   +"<h6>Published on: "
   +data.created_at
-  +"</h6><p class='ideaBodyEdit' contenteditable='true'>Description: "
-  +data.body.substring(0,100)
+  +"</h6><p class='ideaEdit body' contenteditable='true'>"
+  +data.body.substring(0, 100)
   +"</p>"
   +"<p>Quality: "
   +data.quality
   +"</p>"
+  +"<button id='increase-quality' name='button-fetch'"
+  +" class='btn btn-default btn-xs'><i class='fa fa-thumbs-up'></i></button>"
+  +"<button id='decrease-quality' name='button-fetch'"
+  +" class='btn btn-default btn-xs'><i class='fa fa-thumbs-down'></i></button>"
   +"<button id='delete-idea' name='button-fetch'"
   +" class='btn btn-default btn-xs'>Delete</button>"
-  +"<button id='increase-quality' name='button-fetch'"
-  +" class='btn btn-default btn-xs'><i class='fa fa-camera-retro'></i></button>"
-  +"<button id='decrease-quality' name='button-fetch'"
-  +" class='btn btn-default btn-xs'><i class='fa fa-camera-retro'></i></button>"
   +"</div></br>")
 }
 
@@ -116,7 +115,18 @@ function decreaseQuality(){
 }
 
 function saveUpdate(){
-  $('#latest-ideas').on('click', '')
+  $('#latest-ideas').on('blur', '.ideaEdit', function(){
+    var $idea = $(this).parent();
+    var $ideaParams = {
+      title: $idea.find(".title").html(),
+      body: $idea.find(".body").html()
+    }
+    $.ajax({
+      url: "api/v1/ideas/" + $idea.data("id"),
+      data: $ideaParams,
+      type: "put"
+    })
+  })
 }
 
 function renderIdeas( ideasData ){
@@ -141,23 +151,3 @@ function deleteIdea(){
     .fail(handleError);
   });
 }
-
-// function searchTitles(){
-//   $("#idea-search").bind("keyup", function() {
-//     var text = $(this).val().toLowerCase();
-//     var titles = $(".ideaTitleEdit");
-//
-//     //first, hide all:
-//     titles.parent().hide();
-//
-//     //show only those matching user input:
-//     titles.filter(function () {
-//       return $(this).text().toLowerCase().indexOf(text) == 0;
-//     }).parent().show();
-//
-//   });
-// }
-//
-// function changeQuality(){
-//   $('#latest-ideas').on('click', '#change-quality', funciton(){})
-// }
