@@ -70,7 +70,7 @@ function renderIdea(ideaData){
 
 function createIdeaHtml( data ){
   var dataShortBody = data.body.substr(0, 100)
-  var dataTruncatedBody = dataShortBody.substr(0, Math.min(dataShortBody.length, dataShortBody.lastIndexOf(" ")))
+  var dataTruncatedBody = (dataShortBody).substr(0, Math.min(dataShortBody.length, (dataShortBody + " ").lastIndexOf(" ")))
   return $("<div class='idea' data-id='"
   +data.id
   +"'><h3 class='ideaEdit title' contenteditable='true'>"
