@@ -16,6 +16,18 @@ class Api::V1::IdeasController < ApplicationController
 
   def update
     @idea = Idea.find(params[:id])
+    change_quality?
+    @idea.update(idea_params) if params[:change] == nil
+    render 'api/v1/ideas/show'
+  end
+
+  private
+
+  def idea_params
+    params.permit(:title, :body, :quality)
+  end
+
+  def change_quality?
     if params[:change] == "increase"
       if @idea.quality == "swill"
         @idea.update_attributes(quality: "plausible")
@@ -33,13 +45,6 @@ class Api::V1::IdeasController < ApplicationController
         @idea.quality = "swill"
       end
     end
-    render 'api/v1/ideas/show'
-  end
-
-  private
-
-  def idea_params
-    params.required(:idea).permit(:title, :body, :quality)
   end
 
 end
