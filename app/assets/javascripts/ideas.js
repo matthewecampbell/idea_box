@@ -68,6 +68,8 @@ function renderIdea(ideaData){
 }
 
 function createIdeaHtml( data ){
+  var dataShortBody = data.body.substr(0, 100)
+  var dataTruncatedBody = dataShortBody.substr(0, Math.min(dataShortBody.length, dataShortBody.lastIndexOf(" ")))
   return $("<div class='idea' data-id='"
   +data.id
   +"'><h3 class='ideaEdit title' contenteditable='true'>"
@@ -76,7 +78,7 @@ function createIdeaHtml( data ){
   +"<h6>Published on: "
   +data.created_at
   +"</h6><p class='ideaEdit body' contenteditable='true'>"
-  +data.body.substring(0, 100)
+  +dataTruncatedBody
   +"</p>"
   +"<p>Quality: "
   +data.quality
@@ -150,4 +152,19 @@ function deleteIdea(){
     })
     .fail(handleError);
   });
+}
+
+function compare(a, b) {
+  if (a.quality < b.quality)
+    return -1;
+  if (a.quality > b.quality)
+    return 1;
+  return 0;
+}
+
+function saveUpdate(){
+  $('#sort').on('click', function(){
+    var sorted = $ideas.sort(compare);
+    renderIdeas(collectIdeas(sorted));
+  })
 }
