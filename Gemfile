@@ -27,7 +27,7 @@ gem 'jbuilder', '~> 2.5'
 gem 'figaro'
 gem 'faraday'
 gem 'pry'
-gem 'twitter-bootstrap-rails', :git => 'git://github.com/seyhunak/twitter-bootstrap-rails.git'
+gem "font-awesome-rails"
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 

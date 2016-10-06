@@ -1,4 +1,5 @@
 $(document).ready(function(){
+  var $ideas = []
   fetchIdeas();
   fetchIdeasButton();
   createIdea();
@@ -8,10 +9,34 @@ $(document).ready(function(){
   searchTitles();
 });
 
+
+function searchTitles(){
+  $("#idea-search").on('keyup', function(e){
+    var searchMatches = search(e.target.value)
+    var ideasHtml = searchMatches.map(function(e) {
+      return createIdeaHtml(e)
+    })
+    renderIdeas(ideasHtml)
+  })
+}
+
+function search(arg){
+  if (arg){
+    return $ideas.filter(function(e){
+      return e.title.toLowerCase().includes(arg.toLowerCase()) || e.body.toLowerCase().includes(arg.toLowerCase())
+    })
+  } else {
+    return $ideas
+  }
+}
+
 function fetchIdeas(){
   $.ajax({
     url: "api/v1/ideas.json",
-    type: "get"
+    type: "get",
+    success: function(response){
+      $ideas = response
+    }
   }).then(collectIdeas)
   .then(renderIdeas)
   .fail(handleError)
@@ -60,9 +85,9 @@ function createIdeaHtml( data ){
   +"<button id='delete-idea' name='button-fetch'"
   +" class='btn btn-default btn-xs'>Delete</button>"
   +"<button id='increase-quality' name='button-fetch'"
-  +" class='btn btn-default btn-xs'><span class='glyphicon glyphicon-thumbs-up'></span></button>"
+  +" class='btn btn-default btn-xs'><i class='fa fa-camera-retro'></i></button>"
   +"<button id='decrease-quality' name='button-fetch'"
-  +" class='btn btn-default btn-xs'><span class='glyphicon glyphicon-thumbs-down'></span></button>"
+  +" class='btn btn-default btn-xs'><i class='fa fa-camera-retro'></i></button>"
   +"</div></br>")
 }
 
@@ -117,20 +142,6 @@ function deleteIdea(){
   });
 }
 
-function searchTitles(){
-  var $ideas = $('#latest-ideas');
-$('#idea-search').keyup(function() {
-
-    var val = '^(?=.*\\b' + $.trim($(this).val()).split(/\s+/).join('\\b)(?=.*\\b') + ').*$',
-        reg = RegExp(val, 'i'),
-        text;
-
-    $ideas.show().filter(function() {
-        text = $(this).text().replace(/\s+/g, ' ');
-        return !reg.test(text);
-    }).hide();
-});
-}
 // function searchTitles(){
 //   $("#idea-search").bind("keyup", function() {
 //     var text = $(this).val().toLowerCase();
